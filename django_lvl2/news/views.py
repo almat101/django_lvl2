@@ -1,14 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse
 
 from news.models import Article, Journalist
 # Create your views here.
 
-def home(request):
-	articles = Article.objects.all() # this is return a queryset
+def article_detail_view(request, pk): #not recommended to use pk
+	article = get_object_or_404(Article,pk=pk)
+	context= {"article" : article}
+	return render(request, "news/detail_view.html", context)
+
+def list_news(request):
+	articles = Article.objects.all() # this return a queryset
 	journalists = Journalist.objects.all()
 	context = {"articles" : articles, "journalists" : journalists}
-	return render(request, "news/homepage.html" , context)
+	return render(request, "news/list_view.html" , context)
 
 
 
